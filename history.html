@@ -5,6 +5,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>History Quiz</title>
     <script src="auth.js" type="module"></script>
+
+    <!-- Google Translate API -->
+    <script>
+        function googleTranslateInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'en,id', // Restrict to English and Indonesian
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+        }
+    
+        function translatePage() {
+            let language = document.getElementById("language").value;
+            let translateSelect = document.querySelector(".goog-te-combo");
+    
+            if (translateSelect) {
+                translateSelect.value = language;
+                translateSelect.dispatchEvent(new Event("change", { bubbles: true }));
+    
+                // Additional trigger to ensure translation starts
+                setTimeout(() => {
+                    let iframe = document.querySelector("iframe.goog-te-menu-frame");
+                    if (iframe) {
+                        let iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                        let langOptions = iframeDoc.querySelectorAll(".goog-te-menu2-item span");
+    
+                        langOptions.forEach(option => {
+                            if (option.innerText.toLowerCase().includes(language)) {
+                                option.click();
+                            }
+                        });
+                    }
+                }, 500);
+            }
+        }
+    </script>
+    
+    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateInit"></script>    
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -99,30 +138,29 @@
         .logout-btn:hover {
             background: #ff7eb3;
         }
+
         .next-btn {
-      background-color: #ff4081; /* Dark background */
-      color: white;
-      border-color: transparent;
-      padding: 12px 24px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-      border-radius: 8px;
-      transition: all 0.3s ease;
-      display: block;
-      margin: 20px auto; /* Centered */
-      width: 150px;
-      text-align: center;
-  }
+            background-color: #ff4081;
+            color: white;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 20px auto;
+            width: 150px;
+            text-align: center;
+        }
 
-  .next-btn:hover {
-      background-color: #ff7eb3; /* Cyan hover effect */
-      border-color: transparent;
-  }
+        .next-btn:hover {
+            background-color: #ff7eb3;
+        }
 
-  .next-btn:active {
-      transform: scale(0.95); /* Slight shrink effect when clicked */
-  }
+        .next-btn:active {
+            transform: scale(0.95);
+        }
     </style>
 </head>
 <body onload="initializeQuiz();">
@@ -137,16 +175,21 @@
         </div>
     </div>
 
+    <!-- Google Translate Dropdown -->
+    <div id="google_translate_element"></div>
+
+
     <div id="progress-bar">
         <div id="progress"></div>
     </div>
 
     <div id="quiz-container">
-        <p id="question">Loading question...</p>
+        <h2 id="question">Loading question...</h2>
         <div id="options"></div>
-        <button class="next-btn" onclick="nextQuestion()">Next</button>
     </div>
 
+    <button class="next-btn" onclick="nextQuestion()">Next</button>
+    <button class="logout-btn" onclick="logout()">Logout</button>
 
     <script type="module" src="firebase.js"></script>
     <script type="module" src="quiz.js"></script>
@@ -164,11 +207,37 @@
     
         window.initializeQuiz = initializeQuiz;  
     </script>
-    
     <script>
-        function updateProgress(progressPercentage) {
-            document.getElementById("progress").style.width = progressPercentage + "%";
+        function googleTranslateInit() {
+            new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
         }
-    </script>    
+
+        function translatePage() {
+            var language = document.getElementById("language").value;
+            var translateElement = new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'en,id',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+
+            if (language === 'id') {
+                var iframe = document.querySelector('.goog-te-menu-frame');
+                if (iframe) {
+                    var idLangButton = iframe.contentDocument.querySelector('a[lang="id"]');
+                    if (idLangButton) {
+                        idLangButton.click();
+                    }
+                }
+            } else {
+                var iframe = document.querySelector('.goog-te-menu-frame');
+                if (iframe) {
+                    var enLangButton = iframe.contentDocument.querySelector('a[lang="en"]');
+                    if (enLangButton) {
+                        enLangButton.click();
+                    }
+                }
+            }
+        }
+    </script>
 </body>
 </html>
