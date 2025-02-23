@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Islam Quiz</title>
+    <script src="quiz.js" type="module"></script>
+    <script src="auth.js" type="module"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #ff758c, #ff7eb3);
+            text-align: center;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: #007bff;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-info img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        .user-details {
+            font-size: 16px;
+        }
+
+        #progress-bar {
+            width: 90%;
+            background: #ddd;
+            border-radius: 10px;
+            margin: 20px auto;
+            height: 20px;
+            overflow: hidden;
+        }
+
+        #progress {
+            height: 100%;
+            width: 0%;
+            background: #ff4081;
+            transition: width 0.5s ease-in-out;
+        }
+
+        #quiz-container {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            margin: 20px auto;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        #options button {
+            background: #ff4081;
+            border: none;
+            color: black;
+            font-size: 18px;
+            padding: 10px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.3s;
+        }
+
+        #options button:hover {
+            background: #ff7eb3;
+        }
+
+        .next-btn {
+            background-color: #ff4081;
+            color: black;
+            border-color: transparent;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;  
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 20px auto;
+            width: 150px;
+            text-align: center;
+        }
+
+        .next-btn:hover {
+            background-color: #ff7eb3;
+        }
+
+        .next-btn:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body onload="initializeQuiz();">
+    <div class="header">
+        <span>☪️ Islam Quiz</span>
+        <div class="user-info">
+            <img src="user-icon.png" alt="User" id="userImage">
+            <div class="user-details">
+                <div id="userName">Loading...</div>
+                <div>Level: <span id="userLevel">1</span> | Points: <span id="userPoints">0</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="progress-bar">
+        <div id="progress"></div>
+    </div>
+
+    <div id="quiz-container">
+        <p id="question">Loading question...</p>
+        <div id="options"></div>
+        <button class="next-btn" onclick="nextQuestion()">Next</button>
+    </div>
+
+    <script type="module" src="firebase.js"></script>
+    <script type="module" src="quiz.js"></script>
+    <script type="module">
+        import { startGame } from './quiz.js';  
+    
+        function initializeQuiz() {
+            if (typeof loadUserData === "function") {
+                loadUserData(); 
+            } else {
+                console.warn("loadUserData is not defined.");
+            }
+            startGame('islam');
+        }
+    
+        window.initializeQuiz = initializeQuiz;  
+    </script>
+    <script>
+        function updateProgress(progressPercentage) {
+            document.getElementById("progress").style.width = progressPercentage + "%";
+        }
+    </script>  
+</body>
+</html>
